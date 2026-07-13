@@ -1,7 +1,7 @@
 // Configurable backend base URL
 const BASE_URL =
   import.meta.env.VITE_API_URL ||
-  "http://127.0.0.1:5000";
+  "https://projected-checks-banners-quarters.trycloudflare.com";
 
 async function request(endpoint, options = {}) {
   const token = localStorage.getItem('stream_token');
