@@ -2,17 +2,18 @@ import { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 
 import AuthLayout from "../components/auth/AuthLayout";
-import { authApi } from "../lib/api";
+import { useStreamAuth } from "../lib/StreamAuthContext";
 
 export default function StreamLogin() {
 
   const navigate = useNavigate();
+  const { login } = useStreamAuth();
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const [loading, setLoading] = useState(false);
-  const [error, setError] = useState("");
+  const [error, setError] = useState(""); 
 
   async function handleSubmit(e) {
 
@@ -23,14 +24,7 @@ export default function StreamLogin() {
 
     try {
 
-      const data = await authApi.login(email, password);
-
-      localStorage.setItem("stream_token", data.token);
-
-      localStorage.setItem(
-        "stream_user",
-        JSON.stringify(data.user)
-      );
+      await login(email, password);
 
       navigate("/", { replace: true });
 

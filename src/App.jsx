@@ -9,7 +9,7 @@ import Profile from "./pages/Profile";
 import ScrollToTop from "./components/ScrollToTop";
 import SeriesDetails from "./pages/SeriesDetails";
 import Settings from "./pages/Settings";
-
+import { useStreamAuth } from "./lib/StreamAuthContext";
 
 import Footer from "./components/Footer";
 
@@ -24,7 +24,24 @@ function ProtectedLayout({ children }) {
 
 export default function App() {
 
-  const token = localStorage.getItem("stream_token");
+  const { user, loading } = useStreamAuth();
+
+  if (loading) {
+    return (
+      <div
+        style={{
+          background: "#000105",
+          color: "white",
+          height: "100vh",
+          display: "grid",
+          placeItems: "center",
+          fontSize: "30px",
+        }}
+      >
+        Loading...
+      </div>
+    );
+  }
 
   return (
 
@@ -49,7 +66,7 @@ export default function App() {
         <Route
           path="/"
           element={
-            token ? (
+            user ? (
               <ProtectedLayout>
                 <Home />
               </ProtectedLayout>
@@ -62,7 +79,7 @@ export default function App() {
         <Route
           path="/movie/:id"
           element={
-            token ? (
+            user ? (
               <ProtectedLayout>
                 <MovieDetails />
               </ProtectedLayout>
@@ -75,7 +92,7 @@ export default function App() {
         <Route
           path="/watch/:id"
           element={
-            token ? (
+            user ? (
               <VideoPlayer />
             ) : (
               <Navigate to="/login" replace />
@@ -86,7 +103,7 @@ export default function App() {
         <Route
           path="/series/:id"
           element={
-            token ? (
+            user ? (
               <ProtectedLayout>
                 <SeriesDetails />
               </ProtectedLayout>
@@ -99,7 +116,7 @@ export default function App() {
         <Route
           path="/profile"
           element={
-            token ? (
+            user ? (
               <ProtectedLayout>
                 <Profile />
               </ProtectedLayout>
@@ -111,7 +128,7 @@ export default function App() {
         <Route
           path="/settings"
           element={
-            token ? (
+            user ? (
               <ProtectedLayout>
                 <Settings />
               </ProtectedLayout>

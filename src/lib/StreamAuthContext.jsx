@@ -1,5 +1,5 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
-import { authApi } from '@/lib/api';
+import { authApi } from "./api";
 
 const StreamAuthContext = createContext(null);
 
@@ -23,17 +23,37 @@ export function StreamAuthProvider({ children }) {
   }, []);
 
   const login = async (email, password) => {
+
     const data = await authApi.login(email, password);
-    localStorage.setItem('stream_token', data.token);
+
+    localStorage.setItem("stream_token", data.token);
+
+    localStorage.setItem(
+      "stream_user",
+      JSON.stringify(data.user)
+    );
+
     setUser(data.user);
+
     return data;
+
   };
 
   const register = async (userData) => {
+
     const data = await authApi.register(userData);
-    localStorage.setItem('stream_token', data.token);
+
+    localStorage.setItem("stream_token", data.token);
+
+    localStorage.setItem(
+      "stream_user",
+      JSON.stringify(data.user)
+    );
+
     setUser(data.user);
+
     return data;
+
   };
 
   const logout = () => {
